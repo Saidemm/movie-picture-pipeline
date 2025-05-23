@@ -1,0 +1,65 @@
+name: ci-frontend-workflow
+
+on:
+  pull_request:
+     branches:
+       - main # Trigger on pull requests to the main branch
+     paths:
+        - 'frontend/**' # Only trigger if files in the frontend directory change
+workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+        uses: actions/checkout@v2
+
+    - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ">=6.9.0"
+    
+    - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: cd frontend && npm ci
+
+      - name: Run tests
+        run: cd frontend && npm test
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint, test]  # This job will only run if lint and test jobs succeed
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ">=6.9.0"
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+    - name: Install dependencies
+        run: cd frontend && npm install
+
+     - name: Build Docker image
+        run: |    
+          cd frontend  # Navigate to the frontend directory
+          docker build -t movie-picture-app .
+          
+

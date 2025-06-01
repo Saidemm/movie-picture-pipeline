@@ -5,7 +5,7 @@ on:
      branches:
        - main # Trigger on pull requests to the main branch
      paths:
-        - 'frontend/**' # Only trigger if files in the frontend directory change
+        - 'starter/frontend/**' # Only trigger if files in the frontend directory change
 workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
@@ -29,10 +29,10 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: cd frontend && npm ci
+        run: cd starter/frontend && npm ci
 
       - name: Run tests
-        run: cd frontend && npm test
+        run: cd starter/frontend && npm test
 
   build:
     runs-on: ubuntu-latest
@@ -49,17 +49,15 @@ jobs:
       - name: Cache node modules
         uses: actions/cache@v2
         with:
-          path: frontend/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          path: starter/frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('starter/frontend/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
     - name: Install dependencies
-        run: cd frontend && npm install
+        run: npm install --prefix starter/frontend
 
      - name: Build Docker image
         run: |    
-          cd frontend  # Navigate to the frontend directory
+          cd starter/frontend  # Navigate to the frontend directory
           docker build -t movie-picture-app .
-          
-

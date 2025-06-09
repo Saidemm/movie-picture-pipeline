@@ -132,7 +132,7 @@ jobs:
     needs: build_and_push_to_ECR
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4     
+        uses: actions/checkout@v4 
 
       - name: Deploy to Kubernetes using Kustomize
         env:
@@ -141,10 +141,10 @@ jobs:
           AWS_REGION: ${{ env.AWS_REGION }}
 
         run: |
-                cd starter/frontend/k8s       
-                cd ${{ env.K8S_BASE_PATH }}
+          cd starter/frontend/k8s       
+          cd ${{ env.K8S_BASE_PATH }}
 
-            kustomize edit set image frontend=$ECR_REGISTRY/ECR_REPOSITORY :$IMAGE_TAG
+          kustomize edit set image frontend=$ECR_REGISTRY/ECR_REPOSITORY :$IMAGE_TAG
 
-            # Apply the Kubernetes manifests
-            kustomize build | kubectl apply -f -
+          # Apply the Kubernetes manifests
+          kustomize build | kubectl apply -f -

@@ -132,13 +132,13 @@ jobs:
     needs: build_and_push_to_ECR
     steps:
     - name: Checkout code
-        uses: actions/checkout@v4     
+      uses: actions/checkout@v4     
 
     - name: Deploy to Kubernetes using Kustomize
-          env:
-            ECR_REPOSITORY: frontend
-            IMAGE_TAG: ${{ github.sha }}
-            AWS_REGION: ${{ env.AWS_REGION }}
+      env:
+        ECR_REPOSITORY: frontend
+        IMAGE_TAG: ${{ github.sha }}
+        AWS_REGION: ${{ env.AWS_REGION }}
 
       run: |
               cd starter/frontend/k8s       

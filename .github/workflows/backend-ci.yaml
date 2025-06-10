@@ -28,7 +28,7 @@ jobs:
         run: |
           cd ./starter/backend
           pipenv install
-
+          pip install flake8
       - name: Run linting
         run: |
           cd ./starter/backend

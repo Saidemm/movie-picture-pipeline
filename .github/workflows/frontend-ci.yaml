@@ -21,7 +21,7 @@ jobs:
           node-version: "18"
 
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: frontend/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
@@ -77,7 +77,7 @@ jobs:
           node-version: "18"
 
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: starter/frontend/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('starter/frontend/package-lock.json') }}
